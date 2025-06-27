@@ -1,45 +1,30 @@
+package com.smartclinic.model;
 
-	package com.smartclinic.model;
+import jakarta.persistence.*;
 
-	import jakarta.persistence.Entity;
-	import jakarta.persistence.GeneratedValue;
-	import jakarta.persistence.GenerationType;
-	import jakarta.persistence.Id;
+@Entity
+public class Doctor {
 
-	@Entity
-	public class Doctor {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	    @Id
-	    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	    private Long id;
+    private String name;
 
-	    private String name;
-	    private String specialization;
+    private String email;
 
-	    // Getters and Setters
-	    public Long getId() {
-	        return id;
-	    }
+    private String password;
 
-	    public void setId(Long id) {
-	        this.id = id;
-	    }
+    // Getters and setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-	    public String getName() {
-	        return name;
-	    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-	    public void setName(String name) {
-	        this.name = name;
-	    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-	    public String getSpecialization() {
-	        return specialization;
-	    }
-
-	    public void setSpecialization(String specialization) {
-	        this.specialization = specialization;
-	    }
-	}
-
-
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
+}
