@@ -1,14 +1,28 @@
-# Use OpenJDK image
-FROM openjdk:17-jdk-slim
+# ✅ Stage 1: Build the application
+FROM gradle:8.5-jdk17 AS builder
 
-# Set workdir
+# Copy only build files first (for better caching)
+COPY build.gradle settings.gradle gradle.properties gradlew /app/
+COPY gradle /app/gradle
+
 WORKDIR /app
 
-# Copy everything
+# Pre-download dependencies
+RUN ./gradlew build -x test || return 0
+
+# Copy the full source
 COPY . /app
 
-# Build the project (adjust to your build tool)
-RUN ./gradlew build
+# Build the JAR
+RUN ./gradlew clean build -x test
 
-# Run the jar file (adjust jar name)
-CMD ["java", "-jar", "build/libs/smartclinic-0.0.1-SNAPSHOT.jar"]
+# ✅ Stage 2: Create a minimal runtime image
+FROM openjdk:17-jdk-slim
+
+WORKDIR /app
+
+# Copy JAR from the builder stage
+COPY --from=builder /app/build/libs/*.jar app.jar
+
+# Run the JAR
+ENTRYPOINT ["java", "-jar", "app.jar"]
