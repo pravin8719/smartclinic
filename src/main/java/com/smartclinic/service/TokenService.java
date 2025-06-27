@@ -1,17 +1,39 @@
 package com.smartclinic.service;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 @Service
 public class TokenService {
 
-    public String generateToken(String data) {
-        // Example logic to generate a token
-        return "token-" + data.hashCode();
+    private static final String SECRET_KEY = "your-very-secret-key";
+    private static final long EXPIRATION_TIME_MS = 60 * 60 * 1000;
+
+    public String generateToken(String email) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + EXPIRATION_TIME_MS);
+
+        return Jwts.builder()
+                .setSubject(email)
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .compact();
     }
 
-    public boolean validateToken(String token) {
-        // Example logic to validate a token
-        return token != null && token.startsWith("token-");
+    public String validateToken(String token) {
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(SECRET_KEY)
+                    .parseClaimsJws(token)
+                    .getBody();
+            return claims.getSubject();
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
