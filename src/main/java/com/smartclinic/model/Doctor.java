@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import java.util.List;
+
 @Entity
 @Table(name = "doctors")
 public class Doctor {
@@ -26,14 +28,20 @@ public class Doctor {
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
 
+    @ElementCollection
+    @CollectionTable(name = "doctor_available_times", joinColumns = @JoinColumn(name = "doctor_id"))
+    @Column(name = "available_time")
+    private List<String> availableTimes;
+
     // Constructors
     public Doctor() {
     }
 
-    public Doctor(String name, String email, String password) {
+    public Doctor(String name, String email, String password, List<String> availableTimes) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.availableTimes = availableTimes;
     }
 
     // Getters and setters
@@ -49,12 +57,16 @@ public class Doctor {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
+    public List<String> getAvailableTimes() { return availableTimes; }
+    public void setAvailableTimes(List<String> availableTimes) { this.availableTimes = availableTimes; }
+
     @Override
     public String toString() {
         return "Doctor{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
+                ", availableTimes=" + availableTimes +
                 '}';
         // Don't include password in toString for security reasons
     }
