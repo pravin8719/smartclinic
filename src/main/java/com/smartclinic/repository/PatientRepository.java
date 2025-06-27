@@ -6,12 +6,25 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * Repository interface for Patient entity.
+ * Provides CRUD operations and custom query methods
+ * using Spring Data JPA.
+ */
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, Long> {
 
-    // ✅ Custom method to find patient by email
+    /**
+     * Finds a patient by their email address.
+     * @param email the email to search for
+     * @return an Optional containing the matching patient, if found
+     */
     Optional<Patient> findByEmail(String email);
 
-    // ✅ Custom method to find patient by phone number
+    /**
+     * Finds a patient by their contact number.
+     * @param contact the contact number to search for
+     * @return an Optional containing the matching patient, if found
+     */
     Optional<Patient> findByContact(String contact);
 }
