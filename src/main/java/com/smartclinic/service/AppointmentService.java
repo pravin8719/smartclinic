@@ -13,7 +13,8 @@ public class AppointmentService {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
-    public Appointment saveAppointment(Appointment appointment) {
+    // ✅ Updated method name as per assignment criteria
+    public Appointment bookAppointment(Appointment appointment) {
         return appointmentRepository.save(appointment);
     }
 
